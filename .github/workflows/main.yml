@@ -18,7 +18,12 @@ jobs:
         with:
           php-version: '7.4'
 
-      - name: Install Composer dependencies
+      - name: Install Composer
+      run: |
+        curl -sS https://getcomposer.org/installer | php
+        sudo mv composer.phar /usr/local/bin/composer
+
+      - name: Install Dependencies
         run: composer install
 
       - name: Run PHPUnit tests
