@@ -23,8 +23,8 @@ jobs:
       #     curl -sS https://getcomposer.org/installer | php
       #     sudo mv composer.phar /usr/local/bin/composer
 
-      - name: Install Dependencies
-        run: composer install
+      # - name: Install Dependencies
+      #   run: composer install
 
       - name: Run PHPUnit tests
         run: phpunit
