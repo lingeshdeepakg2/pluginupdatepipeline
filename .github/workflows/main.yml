@@ -1,0 +1,36 @@
+name: WordPress Plugin CI/CD
+
+on:
+  push:
+    branches:
+      - development
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '7.4'
+
+      - name: Install Composer dependencies
+        run: composer install
+
+      - name: Run PHPUnit tests
+        run: phpunit
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to WordPress
+        env:
+          WP_PLUGIN_DIR: /wp-content/plugins
+        run: |
+          cp -r * $WP_PLUGIN_DIR/pluginupdatepipeline
