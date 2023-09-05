@@ -17,7 +17,12 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: '7.4'
-
+      
+      - name: Install Composer
+        run : composer install
+            - git add vendor/* -f
+            - npm install
+            - npm run build
       # - name: Install Composer
       #   run: |
       #     curl -sS https://getcomposer.org/installer | php
