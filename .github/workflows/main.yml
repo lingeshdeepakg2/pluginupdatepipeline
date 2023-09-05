@@ -1,46 +1,72 @@
-name: WordPress Plugin CI/CD
-
-on:
-  push:
+image: edbizarro/gitlab-ci-pipeline-php:7.4-alpine
+options:
+  max-time: 15
+pipelines:
     branches:
-      - development
+        development:
+            - step:
+                caches:
+                    - node
+                    - composer
+                name: Build & Deploy - Development
+                # deployment: dev-scwpstarter03
+                clone:
+                    depth: full
+                script:
+                    # Build
+                    - composer install
+                    - git add vendor/* -f
+                    - npm install
+                    - npm run build
+                    - echo "Add plugin files"
+                    - git add -f dist/*
+                    # - 'git commit -m "ci: add dist files"'
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
 
-      - name: Set up PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '7.4'
+# name: WordPress Plugin CI/CD
+
+# on:
+#   push:
+#     branches:
+#       - development
+
+# jobs:
+#   build:
+#     runs-on: ubuntu-latest
+
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v2
+
+#       - name: Set up PHP
+#         uses: shivammathur/setup-php@v2
+#         with:
+#           php-version: '7.4'
       
-      - name: Install Composer
-        run : composer install
-            - git add vendor/* -f
-            - npm install
-            - npm run build
-      # - name: Install Composer
-      #   run: |
-      #     curl -sS https://getcomposer.org/installer | php
-      #     sudo mv composer.phar /usr/local/bin/composer
+#       - name: Install Composer
+#         run : composer install
+#             - git add vendor/* -f
+#             - npm install
+#             - npm run build
+#       # - name: Install Composer
+#       #   run: |
+#       #     curl -sS https://getcomposer.org/installer | php
+#       #     sudo mv composer.phar /usr/local/bin/composer
 
-      # - name: Install Dependencies
-      #   run: composer install
+#       # - name: Install Dependencies
+#       #   run: composer install
 
-      - name: Run PHPUnit tests
-        run: phpunit
+#       - name: Run PHPUnit tests
+#         run: phpunit
 
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
+#   deploy:
+#     needs: build
+#     runs-on: ubuntu-latest
 
-    steps:
-      - name: Deploy to WordPress
-        env:
-          WP_PLUGIN_DIR: /wp-content/plugins
-        run: |
-          cp -r * $WP_PLUGIN_DIR/pluginupdatepipeline
+#     steps:
+#       - name: Deploy to WordPress
+#         env:
+#           WP_PLUGIN_DIR: /wp-content/plugins
+#         run: |
+#           cp -r * $WP_PLUGIN_DIR/pluginupdatepipeline
